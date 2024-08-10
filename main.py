@@ -5,6 +5,7 @@ from settings import GameSettings
 import game_functions as gf
 from player import Player
 
+
 def run_game() -> None:
     # initialize the pygame window
     pygame.init()

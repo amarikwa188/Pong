@@ -8,3 +8,5 @@ class GameSettings:
 
         self.paddle_height: int  = 60
         self.paddle_width: int = 10
+
+        self.paddle_speed: float = 1.0
