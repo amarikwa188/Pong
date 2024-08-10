@@ -13,7 +13,7 @@ def run_game() -> None:
     settings: GameSettings = GameSettings()
 
     # create and setup the screen surface 
-    screen: Surface = pygame.display.set_mode((settings.screen_width,\
+    screen: Surface = pygame.display.set_mode((settings.screen_width,
                                                settings.screen_height))
     
     # the game loop
