@@ -7,21 +7,28 @@ from settings import GameSettings
 from player import Player
 
 
-def check_events() -> None:
+def check_events(player: Player) -> None:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            pass
+            check_keydown_events(event, player)
         elif event.type == pygame.KEYUP:
-            pass
+            check_keyup_events(event, player)
 
 
-def check_keydown_events(event: Event) -> None:
-    pass
+def check_keydown_events(event: Event, player: Player) -> None:
+    if event.key == pygame.K_UP:
+        player.moving_up = True
+    elif event.key == pygame.K_DOWN:
+        player.moving_down = True
 
-def check_keyup_events(event: Event) -> None:
-    pass
+
+def check_keyup_events(event: Event, player: Player) -> None:
+    if event.key == pygame.K_UP:
+        player.moving_up = False
+    elif event.key == pygame.K_DOWN:
+        player.moving_down = False
 
 
 def update_screen(settings: GameSettings, screen: Surface, player: Player) -> None:

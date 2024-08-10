@@ -23,7 +23,8 @@ def run_game() -> None:
 
     # the game loop
     while True:
-        gf.check_events()
+        gf.check_events(player)
+        player.update()
         gf.update_screen(settings, screen, player)
 
 

@@ -26,9 +26,11 @@ class Player:
 
     def update(self) -> None:
         if self.moving_up and self.rect.top > 0:
-            self.y += self.speed
-        if self.moving_down and self.rect.bottom < self.screen.bottom:
             self.y -= self.speed
+        if self.moving_down and self.rect.bottom < self.screen_rect.bottom:
+            self.y += self.speed
+
+        self.rect.centery = self.y
 
 
     def draw_player(self) -> None:
