@@ -7,6 +7,9 @@ from player import Player
 
 
 def run_game() -> None:
+    """
+    Run the game.
+    """
     # initialize the pygame window
     pygame.init()
     pygame.display.set_caption("PONG")
