@@ -2,6 +2,7 @@ import pygame
 from pygame import Surface
 
 from settings import GameSettings
+import game_functions as gf
 
 def run_game() -> None:
     # initialize the pygame window
@@ -12,12 +13,13 @@ def run_game() -> None:
     settings: GameSettings = GameSettings()
 
     # create and setup the screen surface 
-    screen: Surface = pygame.display.set_mode((settings.screen_height,\
-                                               settings.screen_width))
+    screen: Surface = pygame.display.set_mode((settings.screen_width,\
+                                               settings.screen_height))
     
     # the game loop
     while True:
-        pass
+        gf.check_events()
+        gf.update_screen(settings, screen)
 
 
 if __name__ == "__main__":
