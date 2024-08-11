@@ -28,12 +28,12 @@ def run_game() -> None:
     ui_handler: UIHandler = UIHandler(settings, screen)
     
     # initialize a player paddle
-    player: Player = Player(settings, screen)
+    paddle_group: Group = Group()
+    player: Player = Player(settings, screen, paddle_group)
 
     # initialize the ball group and ball object
     ball_group: Group = Group()
-    ball: Ball = Ball(screen)
-    ball_group.add(ball)
+    ball: Ball = Ball(screen, ball_group, paddle_group)
 
     # the game loop
     while True:
@@ -41,8 +41,9 @@ def run_game() -> None:
 
         gf.check_events(player, ui_handler)
         player.update()
+        ball.update()
         ui_handler.manager.update(time_delta)
-        gf.update_screen(settings, screen, ui_handler, player, ball_group)
+        gf.update_screen(settings, screen, ui_handler, player, ball_group, paddle_group)
 
 
 if __name__ == "__main__":

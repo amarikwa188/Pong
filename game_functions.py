@@ -63,7 +63,8 @@ def check_keyup_events(event: Event, player: Player) -> None:
 
 
 def update_screen(settings: GameSettings, screen: Surface,
-                  ui_handler: UIHandler, player: Player, ball_group: Group) -> None:
+                  ui_handler: UIHandler, player: Player, ball_group: Group,
+                  paddle_group: Group) -> None:
     """
     Updates the screen.
 
@@ -74,6 +75,9 @@ def update_screen(settings: GameSettings, screen: Surface,
     screen.fill(settings.bg_color)
     ui_handler.manager.draw_ui(screen)
     ui_handler.draw_ui()
-    player.draw_player()
+    # player.draw_player()
+    for paddle in paddle_group.sprites():
+        paddle.draw_paddle()
+
     ball_group.draw(screen)
     pygame.display.flip()
