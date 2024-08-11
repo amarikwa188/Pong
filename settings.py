@@ -13,4 +13,4 @@ class GameSettings:
         self.paddle_height: int  = 70
         self.paddle_width: int = 10
 
-        self.paddle_speed: float = 0.3
+        self.paddle_speed: float = 1.5

@@ -4,16 +4,19 @@ from pygame import Surface
 from pygame.event import Event
 
 from settings import GameSettings
+from ui_manager import UIHandler
 from player import Player
 
 
-def check_events(player: Player) -> None:
+def check_events(player: Player, ui_handler: UIHandler) -> None:
     """
     Handles user input.
 
     :param player: a reference to the player object.
     """
     for event in pygame.event.get():
+        ui_handler.manager.process_events(event)
+
         if event.type == pygame.QUIT:
             sys.exit()
         elif event.type == pygame.KEYDOWN:
@@ -57,7 +60,7 @@ def check_keyup_events(event: Event, player: Player) -> None:
 
 
 def update_screen(settings: GameSettings, screen: Surface,
-                  player: Player) -> None:
+                  ui_handler: UIHandler, player: Player) -> None:
     """
     Updates the screen.
 
@@ -66,5 +69,7 @@ def update_screen(settings: GameSettings, screen: Surface,
     :param player: a reference to the player object.
     """
     screen.fill(settings.bg_color)
+    ui_handler.manager.draw_ui(screen)
+    ui_handler.draw_center_line()
     player.draw_player()
     pygame.display.flip()
