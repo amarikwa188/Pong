@@ -1,12 +1,10 @@
-import math, time
+import math
 
 import pygame
 from pygame import Surface, Rect
 from pygame.font import Font
 
-# import pygame_gui
 from pygame_gui.ui_manager import UIManager
-from pygame_gui.elements import UIButton, UILabel
 
 from settings import GameSettings
 

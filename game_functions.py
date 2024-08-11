@@ -1,6 +1,7 @@
 import sys
 import pygame
 from pygame import Surface
+from pygame.sprite import Group
 from pygame.event import Event
 
 from settings import GameSettings
@@ -62,7 +63,7 @@ def check_keyup_events(event: Event, player: Player) -> None:
 
 
 def update_screen(settings: GameSettings, screen: Surface,
-                  ui_handler: UIHandler, player: Player) -> None:
+                  ui_handler: UIHandler, player: Player, ball_group: Group) -> None:
     """
     Updates the screen.
 
@@ -74,4 +75,5 @@ def update_screen(settings: GameSettings, screen: Surface,
     ui_handler.manager.draw_ui(screen)
     ui_handler.draw_ui()
     player.draw_player()
+    ball_group.draw(screen)
     pygame.display.flip()
