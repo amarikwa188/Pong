@@ -28,7 +28,9 @@ class Player:
         self.y: float = float(self.rect.centery)
 
         self.moving_up: bool = False
+        self.current_up_key = None
         self.moving_down: bool = False
+        self.current_down_key = None
 
 
     def update(self) -> None:

@@ -29,10 +29,14 @@ def check_keydown_events(event: Event, player: Player) -> None:
     :param event: the given event instance.
     :param player: a reference to the player object.
     """
-    if event.key == pygame.K_UP:
+    if event.key in (pygame.K_UP, pygame.K_w) and \
+        not player.current_up_key:
         player.moving_up = True
-    elif event.key == pygame.K_DOWN:
+        player.current_up_key = event.key
+    elif event.key in (pygame.K_DOWN, pygame.K_s) and \
+        not player.current_down_key:
         player.moving_down = True
+        player.current_down_key = event.key
 
 
 def check_keyup_events(event: Event, player: Player) -> None:
@@ -42,10 +46,14 @@ def check_keyup_events(event: Event, player: Player) -> None:
     :param event: the given event instance.
     :param player: a reference to the player object.
     """
-    if event.key == pygame.K_UP:
+    if event.key in (pygame.K_UP, pygame.K_w) and \
+        event.key == player.current_up_key:
         player.moving_up = False
-    elif event.key == pygame.K_DOWN:
+        player.current_up_key = None
+    elif event.key in (pygame.K_DOWN, pygame.K_s) and \
+        event.key == player.current_down_key:
         player.moving_down = False
+        player.current_down_key = None
 
 
 def update_screen(settings: GameSettings, screen: Surface,
