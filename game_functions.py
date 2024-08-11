@@ -20,12 +20,12 @@ def check_events(player: Player, ui_handler: UIHandler) -> None:
         if event.type == pygame.QUIT:
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            check_keydown_events(event, player)
+            check_keydown_events(event, player, ui_handler)
         elif event.type == pygame.KEYUP:
             check_keyup_events(event, player)
 
 
-def check_keydown_events(event: Event, player: Player) -> None:
+def check_keydown_events(event: Event, player: Player, ui_handler: UIHandler) -> None:
     """
     Handles key presses.
 
@@ -40,6 +40,8 @@ def check_keydown_events(event: Event, player: Player) -> None:
         not player.current_down_key:
         player.moving_down = True
         player.current_down_key = event.key
+    elif event.key == pygame.K_SPACE:
+        ui_handler.player_score += 1
 
 
 def check_keyup_events(event: Event, player: Player) -> None:
@@ -70,6 +72,6 @@ def update_screen(settings: GameSettings, screen: Surface,
     """
     screen.fill(settings.bg_color)
     ui_handler.manager.draw_ui(screen)
-    ui_handler.draw_center_line()
+    ui_handler.draw_ui()
     player.draw_player()
     pygame.display.flip()
