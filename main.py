@@ -27,15 +27,15 @@ def run_game() -> None:
     clock: Clock = pygame.time.Clock()
     ui_handler: UIHandler = UIHandler(settings, screen)
     
-    # initialize a player paddle
+    # initialize the paddle group and a player paddle
     paddle_group: Group = Group()
     player: Player = Player(settings, screen, paddle_group)
 
     # initialize the ball group and ball object
     ball_group: Group = Group()
-    ball: Ball = Ball(screen, ball_group, paddle_group)
+    ball: Ball = Ball(settings, screen, ball_group, paddle_group)
 
-    # the game loop
+    # start the game loop
     while True:
         time_delta: float = clock.tick(360)/1000
 

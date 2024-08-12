@@ -1,12 +1,16 @@
+import math
+
 import pygame
 from pygame import Surface, Rect, Mask
 from pygame.sprite import Sprite, Group
 
+from settings import GameSettings
+
 
 class Ball(Sprite):
     """Represents an instance of the ball class."""
-    def __init__(self, screen: Surface, ball_group: Group,
-                 paddle_group: Group) -> None:
+    def __init__(self, settings: GameSettings, screen: Surface,
+                 ball_group: Group, paddle_group: Group) -> None:
         """
         Initializes a ball object.
 
@@ -18,7 +22,8 @@ class Ball(Sprite):
         """
         super().__init__()
 
-        # make a reference to the screen
+        # make a reference to the settings and screen
+        self.settings: GameSettings = settings
         self.screen: Surface = screen
         self.screen_rect: Rect = self.screen.get_rect()
 
@@ -32,14 +37,19 @@ class Ball(Sprite):
         self.x: float = float(self.rect.x)
         self.y: float = float(self.rect.y)
 
+        # handle bounce and movement
+        self.speed: float = self.settings.ball_speed
+        self.v_x: float = -self.speed
+        self.v_y: float = 0.0
+
         # create a mask to handle pixel-perfect collisions
         self.mask: Mask = pygame.mask.from_surface(self.image)
-
-        self.move: bool = True
 
         # add the ball to ball group and set the paddle group
         ball_group.add(self)
         self.paddle_group: Group = paddle_group
+
+        self.move_side: bool = True
 
     def update(self) -> None:
         """
@@ -47,9 +57,11 @@ class Ball(Sprite):
         """
         self.check_collisions(self.paddle_group)
 
-        if self.move:
-            self.x -= 0.1
-            self.rect.x = self.x
+        self.x += self.v_x
+        self.y += self.v_y
+
+        self.rect.x = self.x
+        self.rect.y = self.y
 
     def check_collisions(self, paddle_group: Group) -> None:
         """
@@ -60,5 +72,26 @@ class Ball(Sprite):
         if pygame.sprite.spritecollide(self, paddle_group, False):
             if pygame.sprite.spritecollide(self, paddle_group, False,
                                            pygame.sprite.collide_mask):
-                self.move = False
+                # bounce
+                self.move_side = False
+                paddle_hit = pygame.sprite.spritecollideany(self, paddle_group)
+
+                ball_y: int = self.rect.centery
+                paddle_y: int = paddle_hit.rect.centery
+
+                if ball_y == paddle_y:
+                    # middle
+                    x_multiple: float = 1
+                    y_multiple: float = 0
+                elif ball_y > paddle_y:
+                    # bottom half
+                    x_multiple = 1
+                    y_multiple = 1
+                else:
+                    # top half
+                    x_multiple = 1
+                    y_multiple = -1
+
+                self.v_x = x_multiple * self.speed
+                self.v_y = y_multiple * self.speed
 
