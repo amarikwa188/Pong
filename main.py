@@ -43,7 +43,8 @@ def run_game() -> None:
         player.update()
         ball.update()
         ui_handler.manager.update(time_delta)
-        gf.update_screen(settings, screen, ui_handler, player, ball_group, paddle_group)
+        gf.update_screen(settings, screen, ui_handler, ball_group,
+                         paddle_group)
 
 
 if __name__ == "__main__":
