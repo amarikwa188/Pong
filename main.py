@@ -37,7 +37,7 @@ def run_game() -> None:
 
     # start the game loop
     while True:
-        time_delta: float = clock.tick(360)/1000
+        time_delta: float = clock.tick(480)/1000
 
         gf.check_events(player, ui_handler)
         player.update()

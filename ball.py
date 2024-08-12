@@ -1,4 +1,4 @@
-import math
+import random as rng
 
 import pygame
 from pygame import Surface, Rect, Mask
@@ -69,6 +69,7 @@ class Ball(Sprite):
 
         :param paddle_group: a sprite group containing the paddles.
         """
+        # paddles
         if pygame.sprite.spritecollide(self, paddle_group, False):
             if pygame.sprite.spritecollide(self, paddle_group, False,
                                            pygame.sprite.collide_mask):
@@ -79,19 +80,24 @@ class Ball(Sprite):
                 ball_y: int = self.rect.centery
                 paddle_y: int = paddle_hit.rect.centery
 
+                rand = rng.randint(1,9)/10
                 if ball_y == paddle_y:
                     # middle
                     x_multiple: float = 1
                     y_multiple: float = 0
                 elif ball_y > paddle_y:
                     # bottom half
-                    x_multiple = 1
+                    x_multiple = 1 + rand
                     y_multiple = 1
                 else:
                     # top half
-                    x_multiple = 1
+                    x_multiple = 1 + rand
                     y_multiple = -1
 
                 self.v_x = x_multiple * self.speed
                 self.v_y = y_multiple * self.speed
 
+        # screen edges
+        if self.rect.top <= self.screen_rect.top or \
+            self.rect.bottom >= self.screen_rect.bottom:
+            self.v_y *= -1
