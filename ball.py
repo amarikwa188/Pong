@@ -74,24 +74,27 @@ class Ball(Sprite):
             if pygame.sprite.spritecollide(self, paddle_group, False,
                                            pygame.sprite.collide_mask):
                 # bounce
+                print("collided")
                 self.move_side = False
                 paddle_hit = pygame.sprite.spritecollideany(self, paddle_group)
 
                 ball_y: int = self.rect.centery
                 paddle_y: int = paddle_hit.rect.centery
 
-                rand = rng.randint(1,9)/10
+                rand = rng.randint(4,9)/10
+                if paddle_hit.rect.x < self.settings.screen_width//2:
+                    x_multiple = 1 + rand
+                else:
+                    x_multiple = -1 - rand
+
                 if ball_y == paddle_y:
                     # middle
-                    x_multiple: float = 1
-                    y_multiple: float = 0
+                    y_multiple = 0
                 elif ball_y > paddle_y:
                     # bottom half
-                    x_multiple = 1 + rand
                     y_multiple = 1
                 else:
                     # top half
-                    x_multiple = 1 + rand
                     y_multiple = -1
 
                 self.v_x = x_multiple * self.speed
