@@ -18,5 +18,5 @@ class GameSettings:
 
         # speed settings
         self.player_speed: float = 1.7
-        self.cpu_speed: float = 1.3
+        self.cpu_speed: float = 1.4
         self.ball_speed: float = 1.0

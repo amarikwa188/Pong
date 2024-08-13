@@ -102,7 +102,7 @@ class Ball(Sprite):
                 # set the angle based on where the paddle was hit
                 if ball_y == paddle_y:
                     # middle -> ~ 0 degrees
-                    y_multiple = 0 + randy
+                    y_multiple = 0
                 elif ball_y > paddle_y:
                     # bottom half -> ~ -45 degrees
                     y_multiple = 1 + randy
