@@ -17,11 +17,12 @@ class UIHandler:
         self.manager: UIManager = UIManager((settings.screen_width,
                                              settings.screen_height)) 
         
-        # self.score_font: Font = pygame.font.SysFont(None, 300)
         self.score_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 400)
 
         self.player_score: int = 0
         self.cpu_score: int = 0
+
+        # pygame.mouse.set_visible(False)
 
 
     def draw_ui(self):

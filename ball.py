@@ -5,12 +5,14 @@ from pygame import Surface, Rect, Mask
 from pygame.sprite import Sprite, Group
 
 from settings import GameSettings
+from ui_manager import UIHandler
 
 
 class Ball(Sprite):
     """Represents an instance of the ball class."""
     def __init__(self, settings: GameSettings, screen: Surface,
-                 ball_group: Group, paddle_group: Group) -> None:
+                 ball_group: Group, paddle_group: Group,
+                 ui_handler: UIHandler) -> None:
         """
         Initializes a ball object.
 
@@ -24,6 +26,7 @@ class Ball(Sprite):
 
         # make a reference to the settings and screen
         self.settings: GameSettings = settings
+        self.ui_handler: UIHandler = ui_handler
         self.screen: Surface = screen
         self.screen_rect: Rect = self.screen.get_rect()
 
@@ -49,7 +52,6 @@ class Ball(Sprite):
         ball_group.add(self)
         self.paddle_group: Group = paddle_group
 
-        self.move_side: bool = True
 
     def update(self) -> None:
         """
@@ -63,6 +65,9 @@ class Ball(Sprite):
         self.rect.x = self.x
         self.rect.y = self.y
 
+        # self.out_of_bounds()
+
+
     def check_collisions(self, paddle_group: Group) -> None:
         """
         Check for collision with the paddles and walls.
@@ -74,28 +79,28 @@ class Ball(Sprite):
             if pygame.sprite.spritecollide(self, paddle_group, False,
                                            pygame.sprite.collide_mask):
                 # bounce
-                print("collided")
                 self.move_side = False
                 paddle_hit = pygame.sprite.spritecollideany(self, paddle_group)
 
                 ball_y: int = self.rect.centery
                 paddle_y: int = paddle_hit.rect.centery
 
-                rand = rng.randint(4,9)/10
+                rand = rng.randint(1,4)/10
                 if paddle_hit.rect.x < self.settings.screen_width//2:
                     x_multiple = 1 + rand
                 else:
                     x_multiple = -1 - rand
 
+                rand = rng.randint(1,4)/10
                 if ball_y == paddle_y:
                     # middle
-                    y_multiple = 0
+                    y_multiple = 0 + rand
                 elif ball_y > paddle_y:
                     # bottom half
-                    y_multiple = 1
+                    y_multiple = 1 + rand
                 else:
                     # top half
-                    y_multiple = -1
+                    y_multiple = -1 - rand
 
                 self.v_x = x_multiple * self.speed
                 self.v_y = y_multiple * self.speed
@@ -104,3 +109,11 @@ class Ball(Sprite):
         if self.rect.top <= self.screen_rect.top or \
             self.rect.bottom >= self.screen_rect.bottom:
             self.v_y *= -1
+
+
+    # def out_of_bounds(self) -> None:
+    #     if self.rect.left == 0:
+    #         self.ui_handler.cpu_score += 1
+    #         self.rect.center = self.screen_rect.center
+    #     elif self.rect.right == self.settings.screen_width:
+    #         self.ui_handler.player_score += 1

@@ -31,10 +31,10 @@ def run_game() -> None:
     # initialize the groups and ball object
     paddle_group: Group = Group()
     ball_group: Group = Group()
-    ball: Ball = Ball(settings, screen, ball_group, paddle_group)
+    ball: Ball = Ball(settings, screen, ball_group, paddle_group, ui_handler)
 
     # initialize the cpu and player paddles
-    player: Player = Player(settings, screen, paddle_group)
+    player: Player = Player(settings,  screen, paddle_group)
     cpu: CPU = CPU(settings, screen, paddle_group, ball)
 
     # start the game loop

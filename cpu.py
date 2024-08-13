@@ -19,7 +19,10 @@ class CPU(Sprite):
 
         self.height: int = self.settings.paddle_height
         self.width: int = self.settings.paddle_width
-        self.speed: int = self.settings.paddle_speed
+        self.speed: int = self.settings.paddle_speed * 0.8
+
+        # how far from the center on the x-axis will the ai start trying to match the ball
+        self.detection_range: int = 80
 
         self.surface: Surface = Surface((self.width, self.height))
         self.rect: Rect = self.surface.get_rect()
@@ -34,18 +37,18 @@ class CPU(Sprite):
 
 
     def update(self) -> None:
-        # try to match centery values with the ball at all times
+        # try to math centery values with the ball when it in the right half
         ball_y: int = self.ball.rect.y
+        ball_x: int = self.ball.rect.x
 
-        if self.y > ball_y and self.rect.top > 0:
-            self.y -= self.speed
-        elif self.y < ball_y and self.rect.bottom < self.screen_rect.bottom:
-            self.y += self.speed
+        if ball_x > self.settings.screen_width//2 + self.detection_range:
+            if self.y > ball_y and self.rect.top > 0:
+                self.y -= self.speed
+            elif self.y < ball_y and self.rect.bottom < self.screen_rect.bottom:
+                self.y += self.speed
 
         self.rect.centery = self.y
 
-        # try to math centery values with the ball when it in your half
-        pass
 
     def draw_paddle(self) -> None:
         pygame.draw.rect(self.screen, self.settings.fg_color, self.rect)
