@@ -1,4 +1,5 @@
 import random as rng
+import time
 
 import pygame
 from pygame import Surface, Rect, Mask
@@ -69,6 +70,9 @@ class Ball(Sprite):
         self.rect.x = self.x
         self.rect.y = self.y
 
+        # check if the ball has gone of the screen
+        self.out_of_bounds()
+
 
     def check_collisions(self, paddle_group: Group) -> None:
         """
@@ -103,7 +107,7 @@ class Ball(Sprite):
                 if ball_y == paddle_y:
                     # middle -> ~ 0 degrees
                     y_multiple = 0
-                    x_multiple = 2
+                    x_multiple = 1.8
                 elif ball_y > paddle_y:
                     # bottom half -> ~ -45 degrees
                     y_multiple = 1 + randy
@@ -119,3 +123,39 @@ class Ball(Sprite):
         if self.rect.top <= self.screen_rect.top or \
             self.rect.bottom >= self.screen_rect.bottom:
             self.v_y *= -1
+
+
+    def out_of_bounds(self) -> None:
+        """
+        Reset the ball position when the ball goes out of bounds,
+        while updating the score.
+        """
+        if self.rect.centerx <= self.screen_rect.x:
+            # increase score
+            self.ui_handler.cpu_score += 1
+
+            # reset movement vectors
+            self.v_x = self.speed/2
+            self.v_y = 0
+
+            # reset ball position
+            self.rect.centerx = self.screen_rect.centerx
+            self.rect.centery = self.screen_rect.centery
+
+            self.x = float(self.rect.x)
+            self.y = float(self.rect.y)
+
+        elif self.rect.centerx >= self.settings.screen_width:
+             # increase score
+            self.ui_handler.player_score += 1
+
+            # reset movement vectors
+            self.v_x = self.speed/2
+            self.v_y = 0
+
+            # reset ball position
+            self.rect.centerx = self.screen_rect.centerx
+            self.rect.centery = self.screen_rect.centery
+
+            self.x = float(self.rect.x)
+            self.y = float(self.rect.y)
