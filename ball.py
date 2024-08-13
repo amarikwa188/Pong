@@ -16,15 +16,17 @@ class Ball(Sprite):
         """
         Initializes a ball object.
 
+        :param settings: a reference to the game settings.
         :param screen: a reference to the game screen.
         :param ball_group: a sprite group containing the ball.
         Used for detecting collisions.
         :param paddle_group:  a sprite group containing the paddles.
         Used for detecting collisions.
+        :param ui_handler: a reference to the game ui handler.
         """
         super().__init__()
 
-        # make a reference to the settings and screen
+        # make a reference to the settings, ui handler and screen
         self.settings: GameSettings = settings
         self.ui_handler: UIHandler = ui_handler
         self.screen: Surface = screen
@@ -40,7 +42,7 @@ class Ball(Sprite):
         self.x: float = float(self.rect.x)
         self.y: float = float(self.rect.y)
 
-        # handle bounce and movement
+        # handle bounce
         self.speed: float = self.settings.ball_speed
         self.v_x: float = -self.speed
         self.v_y: float = 0.0
@@ -57,15 +59,15 @@ class Ball(Sprite):
         """
         Check for collisions and update the position of the ball.
         """
+        # check for collisions
         self.check_collisions(self.paddle_group)
 
+        # update position of the ball
         self.x += self.v_x
         self.y += self.v_y
 
         self.rect.x = self.x
         self.rect.y = self.y
-
-        # self.out_of_bounds()
 
 
     def check_collisions(self, paddle_group: Group) -> None:
@@ -74,46 +76,45 @@ class Ball(Sprite):
 
         :param paddle_group: a sprite group containing the paddles.
         """
-        # paddles
+        # handle bouncing off paddles
         if pygame.sprite.spritecollide(self, paddle_group, False):
             if pygame.sprite.spritecollide(self, paddle_group, False,
                                            pygame.sprite.collide_mask):
-                # bounce
-                self.move_side = False
+                # the paddle that was hit
                 paddle_hit = pygame.sprite.spritecollideany(self, paddle_group)
 
+               # get the center positions of the ball and the paddle on
+               # the y-axis
                 ball_y: int = self.rect.centery
                 paddle_y: int = paddle_hit.rect.centery
 
-                rand = rng.randint(1,4)/10
+                # add random floats to the multiples to increase angle variation
+                randx = rng.randint(1,4)/10
+                randy = rng.randint(1,4)/10
+
+                # set the x-multiple based on which side of the screen
+                # the  paddle is located, left -> player, right -> cpu
                 if paddle_hit.rect.x < self.settings.screen_width//2:
-                    x_multiple = 1 + rand
+                    x_multiple = 1 + randx
                 else:
-                    x_multiple = -1 - rand
+                    x_multiple = -1 - randx
 
-                rand = rng.randint(1,4)/10
+                # set the angle based on where the paddle was hit
                 if ball_y == paddle_y:
-                    # middle
-                    y_multiple = 0 + rand
+                    # middle -> ~ 0 degrees
+                    y_multiple = 0 + randy
                 elif ball_y > paddle_y:
-                    # bottom half
-                    y_multiple = 1 + rand
+                    # bottom half -> ~ -45 degrees
+                    y_multiple = 1 + randy
                 else:
-                    # top half
-                    y_multiple = -1 - rand
+                    # top half -> ~ 45 degrees
+                    y_multiple = -1 - randy
 
+                # set the x and y vectors based on the speed and angle 
                 self.v_x = x_multiple * self.speed
                 self.v_y = y_multiple * self.speed
 
-        # screen edges
+        # handle bouncing off screen edges(top and bottom)
         if self.rect.top <= self.screen_rect.top or \
             self.rect.bottom >= self.screen_rect.bottom:
             self.v_y *= -1
-
-
-    # def out_of_bounds(self) -> None:
-    #     if self.rect.left == 0:
-    #         self.ui_handler.cpu_score += 1
-    #         self.rect.center = self.screen_rect.center
-    #     elif self.rect.right == self.settings.screen_width:
-    #         self.ui_handler.player_score += 1
