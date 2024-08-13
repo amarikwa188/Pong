@@ -5,7 +5,10 @@ from pygame.time import Clock
 
 from settings import GameSettings
 from ui_manager import UIHandler
+
 import game_functions as gf
+from scene_manager import SceneManager
+
 from player import Player
 from cpu import CPU
 from ball import Ball
@@ -26,7 +29,8 @@ def run_game() -> None:
     screen: Surface = pygame.display.set_mode((settings.screen_width,
                                                settings.screen_height))
     clock: Clock = pygame.time.Clock()
-    ui_handler: UIHandler = UIHandler(settings, screen)
+    scene: SceneManager = SceneManager(settings)
+    ui_handler: UIHandler = UIHandler(settings, screen, scene)
     
     # initialize the groups and ball object
     paddle_group: Group = Group()
@@ -40,13 +44,15 @@ def run_game() -> None:
     # start the game loop
     while True:
         time_delta: float = clock.tick(480)/1000
-
         gf.check_events(player, ui_handler)
-        player.update()
-        cpu.update()
-        ball.update()
+        gf.check_game_state(ui_handler, scene)
+        if scene.game_screen_active:
+            player.update()
+            cpu.update()
+            ball.update()
+
         ui_handler.manager.update(time_delta)
-        gf.update_screen(settings, screen, ui_handler, ball_group,
+        gf.update_screen(settings, screen, ui_handler, scene, ball_group,
                          paddle_group)
 
 

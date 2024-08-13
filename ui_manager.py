@@ -7,19 +7,22 @@ from pygame.font import Font
 from pygame_gui.ui_manager import UIManager
 
 from settings import GameSettings
+from scene_manager import SceneManager
 
 
 class UIHandler:
     """Represents an instance of the UI Handler."""
-    def __init__(self, settings: GameSettings, screen: Surface) -> None:
+    def __init__(self, settings: GameSettings, screen: Surface,
+                 scene_manager: SceneManager) -> None:
         """
         Initializes the ui handler.
 
         :param settings: a reference to the game's settings.
         :param screen: a reference to the game screen.
         """
-        # make a reference to the game's setting
+        # make a reference to the game's setting and scene manager
         self.settings: GameSettings = settings
+        self.scene_manager: SceneManager = scene_manager
 
         # set up the screen
         self.screen: Surface = screen
@@ -43,6 +46,11 @@ class UIHandler:
         """
         Draw all the custom ui elements to the screen.
         """
+        if self.scene_manager.game_screen_active:
+            self.draw_game_screen()
+
+
+    def draw_game_screen(self) -> None:
         self.draw_center_line()
         self.display_player_score()
         self.display_cpu_score()
@@ -69,7 +77,6 @@ class UIHandler:
             pygame.draw.line(self.screen, line_color, (x_pos, y_start),
                              (x_pos, y_end), line_width)
     
-
     def display_player_score(self) -> None:
         """
         Display the player score.
@@ -88,7 +95,6 @@ class UIHandler:
         # draw the text surface to the screen
         self.screen.blit(image, image_rect)
         
-
     def display_cpu_score(self) -> None:
         """
         Display the cpu score.

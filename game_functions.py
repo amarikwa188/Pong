@@ -6,6 +6,7 @@ from pygame.event import Event
 
 from settings import GameSettings
 from ui_manager import UIHandler
+from scene_manager import SceneManager
 from player import Player
 
 
@@ -21,12 +22,12 @@ def check_events(player: Player, ui_handler: UIHandler) -> None:
         if event.type == pygame.QUIT:
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            check_keydown_events(event, player, ui_handler)
+            check_keydown_events(event, player)
         elif event.type == pygame.KEYUP:
             check_keyup_events(event, player)
 
 
-def check_keydown_events(event: Event, player: Player, ui_handler: UIHandler) -> None:
+def check_keydown_events(event: Event, player: Player) -> None:
     """
     Handles key presses.
 
@@ -41,8 +42,6 @@ def check_keydown_events(event: Event, player: Player, ui_handler: UIHandler) ->
         not player.current_down_key:
         player.moving_down = True
         player.current_down_key = event.key
-    elif event.key == pygame.K_SPACE:
-        ui_handler.player_score += 1
 
 
 def check_keyup_events(event: Event, player: Player) -> None:
@@ -62,9 +61,18 @@ def check_keyup_events(event: Event, player: Player) -> None:
         player.current_down_key = None
 
 
+def check_game_state(ui_handler: UIHandler, scene_manager: SceneManager) -> None:
+    player_score: int = ui_handler.player_score
+    cpu_score: int =  ui_handler.cpu_score
+
+    if player_score >= 10 or cpu_score >= 10:
+        scene_manager.game_screen_active = False
+        scene_manager.end_screen_active = True
+
+
 def update_screen(settings: GameSettings, screen: Surface,
-                  ui_handler: UIHandler, ball_group: Group,
-                  paddle_group: Group) -> None:
+                  ui_handler: UIHandler, scene_manager: SceneManager,
+                  ball_group: Group, paddle_group: Group) -> None:
     """
     Updates the screen.
 
@@ -79,8 +87,9 @@ def update_screen(settings: GameSettings, screen: Surface,
     ui_handler.manager.draw_ui(screen)
     ui_handler.draw_ui()
 
-    for paddle in paddle_group.sprites():
-        paddle.draw_paddle()
-    ball_group.draw(screen)
+    if scene_manager.game_screen_active:
+        for paddle in paddle_group.sprites():
+            paddle.draw_paddle()
+        ball_group.draw(screen)
     
     pygame.display.flip()
