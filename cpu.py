@@ -35,7 +35,7 @@ class CPU(Sprite):
 
         # the distance right-ward from the center that the ball must reach
         # before the ai starts trying to reach it
-        self.detection_range: int = 80
+        self.detection_range: int = self.settings.detection_range
 
         # set up the surface where the paddle will be drawn
         self.surface: Surface = Surface((self.width, self.height))
