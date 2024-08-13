@@ -24,7 +24,7 @@ class Player(Sprite):
         # get the height, width and speed of the paddle from the settings
         self.height: int = self.settings.paddle_height
         self.width: int = self.settings.paddle_width
-        self.speed: float = self.settings.paddle_speed
+        self.speed: float = self.settings.player_speed
 
         # create a surface and rect for the paddle and position it relative
         # to the screen's rect
