@@ -61,11 +61,14 @@ def check_keyup_events(event: Event, player: Player) -> None:
         player.current_down_key = None
 
 
-def check_game_state(ui_handler: UIHandler, scene_manager: SceneManager) -> None:
+def check_game_state(settings: GameSettings, ui_handler: UIHandler, 
+                     scene_manager: SceneManager) -> None:
     player_score: int = ui_handler.player_score
     cpu_score: int =  ui_handler.cpu_score
 
-    if player_score >= 10 or cpu_score >= 10:
+    win: int = settings.win_score
+
+    if player_score >= win or cpu_score >= win:
         scene_manager.game_screen_active = False
         scene_manager.end_screen_active = True
 

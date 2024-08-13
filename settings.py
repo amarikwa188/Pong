@@ -18,8 +18,11 @@ class GameSettings:
 
         # speed settings
         self.player_speed: float = 1.7
-        self.cpu_speed: float = 1.4
+        self.cpu_speed: float = 0.4
         self.ball_speed: float = 1.0
 
         # ai detection range
         self.detection_range: int = 70
+
+        # game details
+        self.win_score: int = 10

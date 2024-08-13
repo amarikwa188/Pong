@@ -34,6 +34,8 @@ class UIHandler:
         
         # set the font for displaying scores
         self.score_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 400)
+        self.final_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 200)
+        self.result_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 70)
 
         # set the scores
         self.player_score: int = 0
@@ -48,6 +50,9 @@ class UIHandler:
         """
         if self.scene_manager.game_screen_active:
             self.draw_game_screen()
+
+        if self.scene_manager.end_screen_active:
+            self.display_winner()
 
 
     def draw_game_screen(self) -> None:
@@ -112,3 +117,31 @@ class UIHandler:
 
         # draw the text surface to the screen
         self.screen.blit(image, image_rect)
+
+
+    def display_winner(self) -> None:
+        scores: Surface = self.final_font.render(f"{self.player_score:02d}-"
+                                                 f"{self.cpu_score:02d}",True,
+                                                 self.settings.fg_color)
+        scores.set_alpha(200)
+
+        scores_rect: Rect = scores.get_rect()
+        scores_rect.centerx = self.screen_rect.centerx
+        scores_rect.centery = 130
+
+        self.screen.blit(scores, scores_rect)
+
+        result_text: str = 'WIN' if self.player_score > self.cpu_score else 'LOSE'
+
+        result: Surface = self.result_font.render(f"YOU {result_text}!", True, 
+                                                  self.settings.fg_color)
+        result.set_alpha(200)
+
+        result_rect: Rect = result.get_rect()
+        result_rect.centerx = self.screen_rect.centerx
+        result_rect.centery = 200
+
+        self.screen.blit(result, result_rect)
+
+    def play_again(self) -> None:
+        pass
