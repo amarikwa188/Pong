@@ -36,12 +36,14 @@ class UIHandler:
         self.score_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 400)
         self.final_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 200)
         self.result_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 70)
+        self.play_again_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 30)
 
         # set the scores
         self.player_score: int = 0
         self.cpu_score: int = 0
 
-        # pygame.mouse.set_visible(False)
+        pygame.mouse.set_visible(False)
+        # pygame.mouse.set_cursor(*pygame.cursors.tri_left)
 
 
     def draw_ui(self):
@@ -53,6 +55,7 @@ class UIHandler:
 
         if self.scene_manager.end_screen_active:
             self.display_winner()
+            self.play_again()
 
 
     def draw_game_screen(self) -> None:
@@ -144,4 +147,14 @@ class UIHandler:
         self.screen.blit(result, result_rect)
 
     def play_again(self) -> None:
-        pass
+        # display text saying 'Press P to play again'
+        text: str = "Press P to play again..."
+        image: Surface = self.play_again_font.render(text, True, 
+                                                     self.settings.fg_color,
+                                                     self.settings.bg_color)
+        image.set_alpha(180)
+        image_rect: Rect = image.get_rect()
+        image_rect.centerx = self.screen_rect.centerx
+        image_rect.centery = 280
+
+        self.screen.blit(image, image_rect)
