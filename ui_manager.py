@@ -135,7 +135,7 @@ class UIHandler:
 
         result_rect: Rect = result.get_rect()
         result_rect.centerx = self.screen_rect.centerx
-        result_rect.centery = 200
+        result_rect.centery = 220
 
         self.screen.blit(result, result_rect)
 
@@ -148,7 +148,7 @@ class UIHandler:
         image.set_alpha(180)
         image_rect: Rect = image.get_rect()
         image_rect.centerx = self.screen_rect.centerx
-        image_rect.centery = 270
+        image_rect.centery = 290
 
         off_image: Surface = image.copy()
         off_image.set_alpha(50)
