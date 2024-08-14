@@ -33,6 +33,7 @@ class UIHandler:
         self.result_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 70)
         self.play_again_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 30)
         self.blinker: cycle = self.play_again_blinker()
+        self.pause_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 200)
 
         # set the scores
         self.player_score: int = 0
@@ -44,6 +45,8 @@ class UIHandler:
         Draw all the custom ui elements to the screen.
         """
         if self.scene_manager.game_screen_active:
+            if self.scene_manager.game_paused:
+                self.draw_pause_screen()
             self.draw_game_screen()
 
         if self.scene_manager.end_screen_active:
@@ -156,3 +159,15 @@ class UIHandler:
         self.play_again_rect: Rect = image_rect
         
         return cycle([image]*200 + [off_image]*200)
+    
+
+    def draw_pause_screen(self) -> None:
+        self.screen.fill((100,100,100))
+        text: str = "||"
+        image: Surface = self.pause_font.render(text, True,
+                                                self.settings.fg_color) 
+        image_rect: Rect = image.get_rect()
+        image_rect.center = self.screen_rect.center
+
+        self.screen.blit(image, image_rect)
+
