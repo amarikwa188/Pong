@@ -167,7 +167,8 @@ class UIHandler:
         image: Surface = self.pause_font.render(text, True,
                                                 self.settings.fg_color) 
         image_rect: Rect = image.get_rect()
-        image_rect.center = self.screen_rect.center
+        image_rect.centerx = self.screen_rect.centerx
+        image_rect.centery = self.screen_rect.centery + 20
 
         self.screen.blit(image, image_rect)
 
