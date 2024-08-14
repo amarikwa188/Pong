@@ -1,4 +1,5 @@
 import math
+from itertools import cycle
 
 import pygame
 from pygame import Surface, Rect
@@ -37,6 +38,7 @@ class UIHandler:
         self.final_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 200)
         self.result_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 70)
         self.play_again_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 30)
+        self.blinker: cycle = self.play_again_blinker()
 
         # set the scores
         self.player_score: int = 0
@@ -55,9 +57,9 @@ class UIHandler:
 
         if self.scene_manager.end_screen_active:
             self.display_winner()
-            self.play_again()
-
-
+            self.screen.blit(next(self.blinker), self.play_again_rect)
+            
+    
     def draw_game_screen(self) -> None:
         self.draw_center_line()
         self.display_player_score()
@@ -146,7 +148,8 @@ class UIHandler:
 
         self.screen.blit(result, result_rect)
 
-    def play_again(self) -> None:
+
+    def play_again_blinker(self) -> cycle:
         # display text saying 'Press P to play again'
         text: str = "Press P to play again..."
         image: Surface = self.play_again_font.render(text, True, 
@@ -155,6 +158,11 @@ class UIHandler:
         image.set_alpha(180)
         image_rect: Rect = image.get_rect()
         image_rect.centerx = self.screen_rect.centerx
-        image_rect.centery = 280
+        image_rect.centery = 270
 
-        self.screen.blit(image, image_rect)
+        off_image: Surface = image.copy()
+        off_image.set_alpha(50)
+
+        self.play_again_rect: Rect = image_rect
+        
+        return cycle([image]*200 + [off_image]*200)
