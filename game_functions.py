@@ -38,15 +38,19 @@ def check_keydown_events(event: Event, screen: Surface, player: Player,
     :param player: a reference to the player object.
     """
     if event.key in (pygame.K_UP, pygame.K_w) and \
-        not player.current_up_key:
+        not player.current_up_key and not scene.game_paused:
         player.moving_up = True
         player.current_up_key = event.key
     elif event.key in (pygame.K_DOWN, pygame.K_s) and \
-        not player.current_down_key:
+        not player.current_down_key and not scene.game_paused:
         player.moving_down = True
         player.current_down_key = event.key
     elif event.key == pygame.K_p and not scene.game_screen_active:
         reset_game(screen, scene, ui_handler, player, cpu)
+    elif event.key == pygame.K_ESCAPE:
+        if scene.game_screen_active:
+            scene.game_paused = True if not scene.game_paused else False
+        
 
 
 def reset_game(screen: Surface, scene: SceneManager, ui_handler: UIHandler,

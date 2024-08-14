@@ -8,3 +8,5 @@ class SceneManager:
         self.game_screen_active: bool = True
         self.start_screen_active: bool = False
         self.end_screen_active: bool = False
+
+        self.game_paused: bool = False
