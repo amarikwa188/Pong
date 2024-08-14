@@ -52,7 +52,7 @@ class CPU(Sprite):
         paddle_group.add(self)
 
         # create a variable for handling smooth movement
-        self.y: float = float(self.rect.y)
+        self.y: float = float(self.rect.centery)
 
 
     def update(self) -> None:

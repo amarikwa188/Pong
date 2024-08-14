@@ -43,15 +43,14 @@ def run_game() -> None:
 
     # start the game loop
     while True:
-        time_delta: float = clock.tick(480)/1000
-        gf.check_events(player, ui_handler)
+        clock.tick(480)
+        gf.check_events(screen, player, cpu, scene, ui_handler)
         gf.check_game_state(settings, ui_handler, scene)
         if scene.game_screen_active:
             player.update()
             cpu.update()
             ball.update()
 
-        ui_handler.manager.update(time_delta)
         gf.update_screen(settings, screen, ui_handler, scene, ball_group,
                          paddle_group)
 

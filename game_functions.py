@@ -8,26 +8,29 @@ from settings import GameSettings
 from ui_manager import UIHandler
 from scene_manager import SceneManager
 from player import Player
+from cpu import CPU
 
 
-def check_events(player: Player, ui_handler: UIHandler) -> None:
+def check_events(screen: Surface, player: Player, cpu: CPU,
+                 scene: SceneManager, ui_handler: UIHandler) -> None:
     """
     Handles user input.
 
     :param player: a reference to the player object.
     """
     for event in pygame.event.get():
-        ui_handler.manager.process_events(event)
-
         if event.type == pygame.QUIT:
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            check_keydown_events(event, player)
+            check_keydown_events(event, screen, player, cpu, scene,
+                                 ui_handler)
         elif event.type == pygame.KEYUP:
             check_keyup_events(event, player)
 
 
-def check_keydown_events(event: Event, player: Player) -> None:
+def check_keydown_events(event: Event, screen: Surface, player: Player,
+                         cpu: CPU, scene: SceneManager,
+                         ui_handler: UIHandler) -> None:
     """
     Handles key presses.
 
@@ -42,6 +45,19 @@ def check_keydown_events(event: Event, player: Player) -> None:
         not player.current_down_key:
         player.moving_down = True
         player.current_down_key = event.key
+    elif event.key == pygame.K_p and not scene.game_screen_active:
+        reset_game(screen, scene, ui_handler, player, cpu)
+
+
+def reset_game(screen: Surface, scene: SceneManager, ui_handler: UIHandler,
+               player: Player, cpu: CPU) -> None:
+    scene.game_screen_active = True
+    scene.end_screen_active = False
+    # reset game
+    ui_handler.cpu_score = 0
+    ui_handler.player_score = 0
+    player.rect.centery = cpu.rect.centery = screen.get_rect().centery
+    player.y = cpu.y = float(player.rect.centery)
 
 
 def check_keyup_events(event: Event, player: Player) -> None:
@@ -87,7 +103,6 @@ def update_screen(settings: GameSettings, screen: Surface,
     """
     screen.fill(settings.bg_color)
 
-    ui_handler.manager.draw_ui(screen)
     ui_handler.draw_ui()
 
     if scene_manager.game_screen_active:

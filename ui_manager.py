@@ -5,8 +5,6 @@ import pygame
 from pygame import Surface, Rect
 from pygame.font import Font
 
-from pygame_gui.ui_manager import UIManager
-
 from settings import GameSettings
 from scene_manager import SceneManager
 
@@ -28,10 +26,6 @@ class UIHandler:
         # set up the screen
         self.screen: Surface = screen
         self.screen_rect: Rect = self.screen.get_rect()
-
-        # set up the ui manager
-        self.manager: UIManager = UIManager((settings.screen_width,
-                                             settings.screen_height)) 
         
         # set the font for displaying scores
         self.score_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 400)
@@ -43,9 +37,6 @@ class UIHandler:
         # set the scores
         self.player_score: int = 0
         self.cpu_score: int = 0
-
-        pygame.mouse.set_visible(False)
-        # pygame.mouse.set_cursor(*pygame.cursors.tri_left)
 
 
     def draw_ui(self):
@@ -147,7 +138,6 @@ class UIHandler:
         result_rect.centery = 200
 
         self.screen.blit(result, result_rect)
-
 
     def play_again_blinker(self) -> cycle:
         # display text saying 'Press P to play again'
