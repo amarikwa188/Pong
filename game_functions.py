@@ -57,6 +57,7 @@ def reset_game(screen: Surface, scene: SceneManager, ui_handler: UIHandler,
                player: Player, cpu: CPU) -> None:
     scene.game_screen_active = True
     scene.end_screen_active = False
+    scene.start_screen_active = False
     # reset game
     ui_handler.cpu_score = 0
     ui_handler.player_score = 0
