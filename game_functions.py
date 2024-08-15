@@ -16,7 +16,11 @@ def check_events(screen: Surface, player: Player, cpu: CPU,
     """
     Handles user input.
 
+    :param screen: a reference to the game screen.
     :param player: a reference to the player object.
+    :param cpu: a reference to the cpu object.
+    :param scene: a reference to the game screen.
+    :param ui_handler: a reference to the ui_handler
     """
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -35,7 +39,11 @@ def check_keydown_events(event: Event, screen: Surface, player: Player,
     Handles key presses.
 
     :param event: the given event instance.
+    :param screen: a reference to the game screen.
     :param player: a reference to the player object.
+    :param cpu: a reference to the cpu object.
+    :param scene: a reference to the scene manager.
+    :param ui_handler: a reference to the ui handler.
     """
     if event.key in (pygame.K_UP, pygame.K_w) and \
         not player.current_up_key and not scene.game_paused:
@@ -49,16 +57,26 @@ def check_keydown_events(event: Event, screen: Surface, player: Player,
         reset_game(screen, scene, ui_handler, player, cpu)
     elif event.key == pygame.K_ESCAPE:
         if scene.game_screen_active:
-            scene.game_paused = True if not scene.game_paused else False
+            scene.game_paused = not scene.game_paused
         
 
 
 def reset_game(screen: Surface, scene: SceneManager, ui_handler: UIHandler,
                player: Player, cpu: CPU) -> None:
+    """
+    Start a new game.
+
+    :param screen: a reference to the game screen.
+    :param scene: a reference to the screen manager.
+    :param ui_handler: a reference to the ui_handler.
+    :param player: the player object.
+    :param cpu: the cpu object. 
+    """
     scene.game_screen_active = True
     scene.end_screen_active = False
-    scene.start_screen_active = False
-    # reset game
+    scene.start_screen_active = False 
+
+    # reset game stats
     ui_handler.cpu_score = 0
     ui_handler.player_score = 0
     player.rect.centery = cpu.rect.centery = screen.get_rect().centery
@@ -83,19 +101,26 @@ def check_keyup_events(event: Event, player: Player) -> None:
 
 
 def check_game_state(settings: GameSettings, ui_handler: UIHandler, 
-                     scene_manager: SceneManager) -> None:
+                     scene: SceneManager) -> None:
+    """
+    End the game when one player wins.
+
+    :param settings: a reference to the game settings.
+    :param ui_handler: a reference to the ui_handler.
+    :param scene: a reference to the scene manager.
+    """
     player_score: int = ui_handler.player_score
     cpu_score: int =  ui_handler.cpu_score
 
     win: int = settings.win_score
 
     if player_score >= win or cpu_score >= win:
-        scene_manager.game_screen_active = False
-        scene_manager.end_screen_active = True
+        scene.game_screen_active = False
+        scene.end_screen_active = True
 
 
 def update_screen(settings: GameSettings, screen: Surface,
-                  ui_handler: UIHandler, scene_manager: SceneManager,
+                  ui_handler: UIHandler, scene: SceneManager,
                   ball_group: Group, paddle_group: Group) -> None:
     """
     Updates the screen.
@@ -103,14 +128,15 @@ def update_screen(settings: GameSettings, screen: Surface,
     :param settings: the game settings.
     :param screen: the screen.
     :param ui_handler: a reference to the ui_handler.
+    :param scene: a reference to the scene manager.
     :param ball_group: a sprite group containing the ball.
-    :param paddle_group:  a sprite group containing the paddles.
+    :param paddle_group: a sprite group containing the paddles.
     """
     screen.fill(settings.bg_color)
 
     ui_handler.draw_ui()
 
-    if scene_manager.game_screen_active:
+    if scene.game_screen_active:
         for paddle in paddle_group.sprites():
             paddle.draw_paddle()
         ball_group.draw(screen)

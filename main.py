@@ -44,8 +44,10 @@ def run_game() -> None:
     # start the game loop
     while True:
         clock.tick(480)
+        
         gf.check_events(screen, player, cpu, scene, ui_handler)
         gf.check_game_state(settings, ui_handler, scene)
+
         if scene.game_screen_active and not scene.game_paused:
             player.update()
             cpu.update()

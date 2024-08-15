@@ -18,6 +18,7 @@ class UIHandler:
 
         :param settings: a reference to the game's settings.
         :param screen: a reference to the game screen.
+        :param scene_manager: a reference to the scene manager.
         """
         # make a reference to the game's setting and scene manager
         self.settings: GameSettings = settings
@@ -27,7 +28,7 @@ class UIHandler:
         self.screen: Surface = screen
         self.screen_rect: Rect = self.screen.get_rect()
         
-        # set the font for displaying scores
+        # set the fonts
         self.score_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 400)
         self.final_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 200)
         self.result_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 70)
@@ -46,25 +47,30 @@ class UIHandler:
         """
         Draw all the custom ui elements to the screen.
         """
+        # main game ui
         if self.scene_manager.game_screen_active:
             if self.scene_manager.game_paused:
                 self.draw_pause_screen()
             self.draw_game_screen()
 
+        # end screen ui
         if self.scene_manager.end_screen_active:
             self.display_winner()
             self.screen.blit(next(self.play_blinker), self.play_again_rect)
 
+        # start screen ui
         if self.scene_manager.start_screen_active:
             self.draw_title()
             self.screen.blit(next(self.starter_blinker), self.start_rect)
             
     
     def draw_game_screen(self) -> None:
+        """
+        Draw the main game ui.
+        """
         self.draw_center_line()
         self.display_player_score()
         self.display_cpu_score()
-
 
     def draw_center_line(self) -> None:
         """
@@ -125,6 +131,9 @@ class UIHandler:
 
 
     def display_winner(self) -> None:
+        """
+        Display the results of the game to the end screen.
+        """
         scores: Surface = self.final_font.render(f"{self.player_score:02d}-"
                                                  f"{self.cpu_score:02d}",True,
                                                  self.settings.fg_color)
@@ -149,8 +158,15 @@ class UIHandler:
         self.screen.blit(result, result_rect)
 
     def play_again_blinker(self) -> cycle:
-        # display text saying 'Press P to play again'
+        """
+        Create a cycle object used to display blinking text.
+
+        :return: a cycle object containing text rendered at different
+        opacitites.
+        """
         text: str = "Press P to play again..."
+
+        # create brighter text render
         image: Surface = self.play_again_font.render(text, True, 
                                                      self.settings.fg_color,
                                                      self.settings.bg_color)
@@ -159,15 +175,20 @@ class UIHandler:
         image_rect.centerx = self.screen_rect.centerx
         image_rect.centery = 290
 
+        # create another text render with lower opacity
         off_image: Surface = image.copy()
         off_image.set_alpha(50)
 
+        # save the position of the text
         self.play_again_rect: Rect = image_rect
         
         return cycle([image]*200 + [off_image]*200)
     
 
     def draw_pause_screen(self) -> None:
+        """
+        Draw the pause screen ui to the game screen.
+        """
         self.screen.fill((100,100,100))
         text: str = "||"
         image: Surface = self.pause_font.render(text, True,
@@ -180,6 +201,9 @@ class UIHandler:
 
 
     def draw_title(self) -> None:
+        """
+        Draw the title logo to the game screen.
+        """
         title: Surface = self.title_font.render("PONG", True,
                                                 self.settings.fg_color,
                                                 self.settings.bg_color)
@@ -190,8 +214,17 @@ class UIHandler:
 
         self.screen.blit(title, title_rect)
 
+
     def start_blinker(self) -> cycle:
+        """
+        Create a cycle object used to display blinking text.
+
+        :return: a cycle object containing text rendered at different
+        opacitites.
+        """
         text: str = "Press P to play..."
+
+        # create brighter text render
         image: Surface = self.play_again_font.render(text, True,
                                                      self.settings.fg_color,
                                                      self.settings.bg_color)
@@ -200,9 +233,11 @@ class UIHandler:
         image_rect.centerx = self.screen_rect.centerx
         image_rect.centery = 250
 
+        # create another text render with lower opacity
         off_image: Surface = image.copy()
         off_image.set_alpha(50)
 
+        # save the position of the text
         self.start_rect: Rect = image_rect
 
         return cycle([image]*200 + [off_image]*200)
