@@ -32,8 +32,10 @@ class UIHandler:
         self.final_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 200)
         self.result_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 70)
         self.play_again_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 30)
-        self.blinker: cycle = self.play_again_blinker()
+        self.play_blinker: cycle = self.play_again_blinker()
+        self.starter_blinker: cycle = self.start_blinker() 
         self.pause_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 200)
+        self.title_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 200)
 
         # set the scores
         self.player_score: int = 0
@@ -51,7 +53,11 @@ class UIHandler:
 
         if self.scene_manager.end_screen_active:
             self.display_winner()
-            self.screen.blit(next(self.blinker), self.play_again_rect)
+            self.screen.blit(next(self.play_blinker), self.play_again_rect)
+
+        if self.scene_manager.start_screen_active:
+            self.draw_title()
+            self.screen.blit(next(self.starter_blinker), self.start_rect)
             
     
     def draw_game_screen(self) -> None:
@@ -172,3 +178,31 @@ class UIHandler:
 
         self.screen.blit(image, image_rect)
 
+
+    def draw_title(self) -> None:
+        title: Surface = self.title_font.render("PONG", True,
+                                                self.settings.fg_color,
+                                                self.settings.bg_color)
+        title_rect: Rect = title.get_rect()
+
+        title_rect.centerx = self.screen_rect.centerx
+        title_rect.centery = 170
+
+        self.screen.blit(title, title_rect)
+
+    def start_blinker(self) -> cycle:
+        text: str = "Press P to play..."
+        image: Surface = self.play_again_font.render(text, True,
+                                                     self.settings.fg_color,
+                                                     self.settings.bg_color)
+        image.set_alpha(180)
+        image_rect: Rect = image.get_rect()
+        image_rect.centerx = self.screen_rect.centerx
+        image_rect.centery = 250
+
+        off_image: Surface = image.copy()
+        off_image.set_alpha(50)
+
+        self.start_rect: Rect = image_rect
+
+        return cycle([image]*200 + [off_image]*200)
