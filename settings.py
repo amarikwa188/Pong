@@ -17,8 +17,8 @@ class GameSettings:
         self.paddle_width: int = 10
 
         # speed settings
-        self.player_speed: float = 2.8
-        self.cpu_speed: float = 2.6
+        self.player_speed: float = 3.0
+        self.cpu_speed: float = 2.7
         self.ball_speed: float = 2.0
 
         # ai detection range
