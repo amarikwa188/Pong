@@ -5,6 +5,7 @@ from pygame.time import Clock
 
 from settings import GameSettings
 from ui_manager import UIHandler
+from audio_handler import AudioHandler
 
 import game_functions as gf
 from scene_manager import SceneManager
@@ -31,11 +32,13 @@ def run_game() -> None:
     clock: Clock = pygame.time.Clock()
     scene: SceneManager = SceneManager(settings)
     ui_handler: UIHandler = UIHandler(settings, screen, scene)
+    audio_handler: AudioHandler = AudioHandler()
     
     # initialize the groups and ball object
     paddle_group: Group = Group()
     ball_group: Group = Group()
-    ball: Ball = Ball(settings, screen, ball_group, paddle_group, ui_handler)
+    ball: Ball = Ball(settings, screen, ball_group, paddle_group, ui_handler,
+                      audio_handler)
 
     # initialize the cpu and player paddles
     player: Player = Player(settings,  screen, paddle_group)

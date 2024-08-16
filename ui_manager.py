@@ -34,6 +34,7 @@ class UIHandler:
         self.result_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 70)
         self.play_again_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 30)
 
+    	# handle blinking text
         self.BLINKEVENT: int = pygame.USEREVENT + 1
 
         self.play_blinker: cycle = self.play_again_blinker()

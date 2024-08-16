@@ -7,13 +7,14 @@ from pygame.sprite import Sprite, Group
 
 from settings import GameSettings
 from ui_manager import UIHandler
+from audio_handler import AudioHandler
 
 
 class Ball(Sprite):
     """Represents an instance of the ball class."""
     def __init__(self, settings: GameSettings, screen: Surface,
                  ball_group: Group, paddle_group: Group,
-                 ui_handler: UIHandler) -> None:
+                 ui_handler: UIHandler, audio: AudioHandler) -> None:
         """
         Initializes a ball object.
 
@@ -30,6 +31,7 @@ class Ball(Sprite):
         # make a reference to the settings, ui handler and screen
         self.settings: GameSettings = settings
         self.ui_handler: UIHandler = ui_handler
+        self.audio: AudioHandler = audio
         self.screen: Surface = screen
         self.screen_rect: Rect = self.screen.get_rect()
 
@@ -54,6 +56,8 @@ class Ball(Sprite):
         # add the ball to ball group and set the paddle group
         ball_group.add(self)
         self.paddle_group: Group = paddle_group
+
+        self.last_played: float = time.time()
 
 
     def update(self) -> None:
@@ -84,6 +88,11 @@ class Ball(Sprite):
         if pygame.sprite.spritecollide(self, paddle_group, False):
             if pygame.sprite.spritecollide(self, paddle_group, False,
                                            pygame.sprite.collide_mask):
+                # play sound effect
+                if time.time() - self.last_played > 0.05:
+                    self.audio.bounce_sound.play()
+                    self.last_played = time.time()
+
                 # the paddle that was hit
                 paddle_hit = pygame.sprite.spritecollideany(self, paddle_group)
 
@@ -122,6 +131,9 @@ class Ball(Sprite):
         # handle bouncing off screen edges(top and bottom)
         if self.rect.top <= self.screen_rect.top or \
             self.rect.bottom >= self.screen_rect.bottom:
+            if time.time() - self.last_played > 0.05:
+                self.audio.bounce_sound.play()
+                self.last_played = time.time()
             self.v_y *= -1
 
 
