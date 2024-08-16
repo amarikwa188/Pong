@@ -47,7 +47,9 @@ class Ball(Sprite):
         self.y: float = float(self.rect.y)
 
         # handle bounce
-        self.speed: float = self.settings.ball_speed
+        self.initial_speed: float = self.settings.ball_speed
+        self.max_speed: float = self.initial_speed + 0.4
+        self.speed: float = self.initial_speed
         self.v_x: float = self.speed
         self.v_y: float = 0.0
 
@@ -109,7 +111,8 @@ class Ball(Sprite):
 
                 # set the x-multiple based on which side of the screen
                 # the  paddle is located, left -> player, right -> cpu
-                if paddle_hit.rect.x < self.settings.screen_width//2:
+                player_hit: bool = paddle_hit.rect.x < self.settings.screen_width//2
+                if player_hit:
                     x_multiple = 1 + randx
                 else:
                     x_multiple = -1 - randx
@@ -118,7 +121,7 @@ class Ball(Sprite):
                 if ball_y == paddle_y:
                     # middle -> ~ 0 degrees
                     y_multiple = 0
-                    x_multiple = 1.8
+                    x_multiple = 1.8 if player_hit else -1.4
                 elif ball_y > paddle_y:
                     # bottom half -> ~ -45 degrees
                     y_multiple = 1 + randy
@@ -129,6 +132,9 @@ class Ball(Sprite):
                 # set the x and y vectors based on the speed and angle 
                 self.v_x = x_multiple * self.speed
                 self.v_y = y_multiple * self.speed
+
+                if self.speed < self.max_speed:
+                    self.speed += 0.05
 
         # handle bouncing off screen edges(top and bottom)
         if self.rect.top <= self.screen_rect.top or \
@@ -165,6 +171,8 @@ class Ball(Sprite):
             self.x = float(self.rect.x)
             self.y = float(self.rect.y)
 
+            self.speed = self.initial_speed
+
         elif self.rect.centerx >= self.settings.screen_width:
             # play sfx
             self.audio.point_sound.play()
@@ -181,3 +189,5 @@ class Ball(Sprite):
 
             self.x = float(self.rect.x)
             self.y = float(self.rect.y)
+
+            self.speed = self.initial_speed

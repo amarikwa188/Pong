@@ -65,6 +65,8 @@ class CPU(Sprite):
         ball_x: int = self.ball.rect.x
 
         if ball_x > self.settings.screen_width//2 + self.detection_range:
+            if abs(ball_y-self.y) < 3:
+                return
             if self.y > ball_y and self.rect.top > 0:
                 self.y -= self.speed
             elif self.y < ball_y and self.rect.bottom < self.screen_rect.bottom:
