@@ -29,10 +29,12 @@ class Ball(Sprite):
         """
         super().__init__()
 
-        # make a reference to the settings, ui handler and screen
+        # make a reference to the settings, ui handler and audio handler
         self.settings: GameSettings = settings
         self.ui_handler: UIHandler = ui_handler
         self.audio: AudioHandler = audio
+
+        # get screen data
         self.screen: Surface = screen
         self.screen_rect: Rect = self.screen.get_rect()
 
@@ -133,6 +135,7 @@ class Ball(Sprite):
                 self.v_x = x_multiple * self.speed
                 self.v_y = y_multiple * self.speed
 
+                # increase speed
                 if self.speed < self.max_speed:
                     self.speed += 0.05
 
@@ -144,7 +147,7 @@ class Ball(Sprite):
                 self.audio.bounce_sound.play()
                 self.last_played = time.time()
             
-            # reverse y velocity
+            # invert y velocity
             self.v_y *= -1
 
 
@@ -171,6 +174,7 @@ class Ball(Sprite):
             self.x = float(self.rect.x)
             self.y = float(self.rect.y)
 
+            # reset speed
             self.speed = self.initial_speed
 
         elif self.rect.centerx >= self.settings.screen_width:
@@ -190,4 +194,5 @@ class Ball(Sprite):
             self.x = float(self.rect.x)
             self.y = float(self.rect.y)
 
+            # reset speed
             self.speed = self.initial_speed

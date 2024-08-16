@@ -33,6 +33,8 @@ class UIHandler:
         self.final_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 200)
         self.result_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 70)
         self.play_again_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 30)
+        self.pause_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 200)
+        self.title_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 200)
 
     	# handle blinking text
         self.BLINKEVENT: int = pygame.USEREVENT + 1
@@ -43,9 +45,6 @@ class UIHandler:
         self.starter_blinker: cycle = self.start_blinker() 
         self.starter_current: Surface = next(self.starter_blinker)
         pygame.time.set_timer(self.BLINKEVENT, 500)
-
-        self.pause_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 200)
-        self.title_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 200)
 
         # set the scores
         self.player_score: int = 0
