@@ -7,12 +7,15 @@ from pygame.event import Event
 from settings import GameSettings
 from ui_manager import UIHandler
 from scene_manager import SceneManager
+from audio_handler import AudioHandler
+
 from player import Player
 from cpu import CPU
 
 
 def check_events(screen: Surface, player: Player, cpu: CPU,
-                 scene: SceneManager, ui_handler: UIHandler) -> None:
+                 scene: SceneManager, ui_handler: UIHandler,
+                 audio: AudioHandler) -> None:
     """
     Handles user input.
 
@@ -27,7 +30,7 @@ def check_events(screen: Surface, player: Player, cpu: CPU,
             sys.exit()
         elif event.type == pygame.KEYDOWN:
             check_keydown_events(event, screen, player, cpu, scene,
-                                 ui_handler)
+                                 ui_handler, audio)
         elif event.type == pygame.KEYUP:
             check_keyup_events(event, player)
         elif event.type == ui_handler.BLINKEVENT:
@@ -39,7 +42,7 @@ def check_events(screen: Surface, player: Player, cpu: CPU,
 
 def check_keydown_events(event: Event, screen: Surface, player: Player,
                          cpu: CPU, scene: SceneManager,
-                         ui_handler: UIHandler) -> None:
+                         ui_handler: UIHandler, audio: AudioHandler) -> None:
     """
     Handles key presses.
 
@@ -63,6 +66,7 @@ def check_keydown_events(event: Event, screen: Surface, player: Player,
         pygame.time.set_timer(ui_handler.BLINKEVENT, 0)
     elif event.key == pygame.K_ESCAPE:
         if scene.game_screen_active:
+            audio.pause_sound.play()
             scene.game_paused = not scene.game_paused
         
 

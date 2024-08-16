@@ -143,6 +143,7 @@ class Ball(Sprite):
         while updating the score.
         """
         if self.rect.centerx <= self.screen_rect.x:
+            self.audio.point_sound.play()
             # increase score
             self.ui_handler.cpu_score += 1
 
@@ -158,6 +159,7 @@ class Ball(Sprite):
             self.y = float(self.rect.y)
 
         elif self.rect.centerx >= self.settings.screen_width:
+            self.audio.point_sound.play()
              # increase score
             self.ui_handler.player_score += 1
 
