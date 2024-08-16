@@ -23,7 +23,8 @@ def check_events(screen: Surface, player: Player, cpu: CPU,
     :param player: a reference to the player object.
     :param cpu: a reference to the cpu object.
     :param scene: a reference to the game screen.
-    :param ui_handler: a reference to the ui_handler
+    :param ui_handler: a reference to the ui handler.
+    :param audio: a reference to the audio handler.
     """
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -52,6 +53,7 @@ def check_keydown_events(event: Event, screen: Surface, player: Player,
     :param cpu: a reference to the cpu object.
     :param scene: a reference to the scene manager.
     :param ui_handler: a reference to the ui handler.
+    :param audio: a reference to the audio handler.
     """
     if event.key in (pygame.K_UP, pygame.K_w) and \
         not player.current_up_key and not scene.game_paused:
@@ -70,7 +72,6 @@ def check_keydown_events(event: Event, screen: Surface, player: Player,
             audio.action_sound.play()
             scene.game_paused = not scene.game_paused
         
-
 
 def reset_game(screen: Surface, scene: SceneManager, ui_handler: UIHandler,
                player: Player, cpu: CPU) -> None:

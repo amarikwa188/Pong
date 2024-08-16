@@ -25,6 +25,7 @@ class Ball(Sprite):
         :param paddle_group:  a sprite group containing the paddles.
         Used for detecting collisions.
         :param ui_handler: a reference to the game ui handler.
+        :param audio: a reference to the audio handler.
         """
         super().__init__()
 
@@ -57,6 +58,7 @@ class Ball(Sprite):
         ball_group.add(self)
         self.paddle_group: Group = paddle_group
 
+        # track when the bounce sound effect was last played
         self.last_played: float = time.time()
 
 
@@ -88,7 +90,7 @@ class Ball(Sprite):
         if pygame.sprite.spritecollide(self, paddle_group, False):
             if pygame.sprite.spritecollide(self, paddle_group, False,
                                            pygame.sprite.collide_mask):
-                # play sound effect
+                # play sfx without spam
                 if time.time() - self.last_played > 0.05:
                     self.audio.bounce_sound.play()
                     self.last_played = time.time()
@@ -131,9 +133,12 @@ class Ball(Sprite):
         # handle bouncing off screen edges(top and bottom)
         if self.rect.top <= self.screen_rect.top or \
             self.rect.bottom >= self.screen_rect.bottom:
+            # play sfx without spam
             if time.time() - self.last_played > 0.05:
                 self.audio.bounce_sound.play()
                 self.last_played = time.time()
+            
+            # reverse y velocity
             self.v_y *= -1
 
 
@@ -143,7 +148,9 @@ class Ball(Sprite):
         while updating the score.
         """
         if self.rect.centerx <= self.screen_rect.x:
+            # play sfx
             self.audio.point_sound.play()
+
             # increase score
             self.ui_handler.cpu_score += 1
 
@@ -159,6 +166,7 @@ class Ball(Sprite):
             self.y = float(self.rect.y)
 
         elif self.rect.centerx >= self.settings.screen_width:
+            # play sfx
             self.audio.point_sound.play()
              # increase score
             self.ui_handler.player_score += 1

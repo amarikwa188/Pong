@@ -81,6 +81,7 @@ class UIHandler:
         self.display_player_score()
         self.display_cpu_score()
 
+
     def draw_center_line(self) -> None:
         """
         Draw the center line to the game screen.
@@ -102,6 +103,7 @@ class UIHandler:
             pygame.draw.line(self.screen, line_color, (x_pos, y_start),
                              (x_pos, y_end), line_width)
     
+
     def display_player_score(self) -> None:
         """
         Display the player score.
@@ -120,6 +122,7 @@ class UIHandler:
         # draw the text surface to the screen
         self.screen.blit(image, image_rect)
         
+
     def display_cpu_score(self) -> None:
         """
         Display the cpu score.
@@ -143,6 +146,7 @@ class UIHandler:
         """
         Display the results of the game to the end screen.
         """
+        # display final score
         scores: Surface = self.final_font.render(f"{self.player_score:02d}-"
                                                  f"{self.cpu_score:02d}",True,
                                                  self.settings.fg_color)
@@ -154,6 +158,7 @@ class UIHandler:
 
         self.screen.blit(scores, scores_rect)
 
+        # display result text
         result_text: str = 'WIN' if self.player_score > self.cpu_score else 'LOSE'
 
         result: Surface = self.result_font.render(f"YOU {result_text}!", True, 
@@ -165,6 +170,7 @@ class UIHandler:
         result_rect.centery = 220
 
         self.screen.blit(result, result_rect)
+
 
     def play_again_blinker(self) -> cycle:
         """

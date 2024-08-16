@@ -26,11 +26,13 @@ def run_game() -> None:
     #create an instance of the settings class
     settings: GameSettings = GameSettings()
 
-    # create and setup the screen surface, clock, and ui handler 
+    # create and setup the screen surface and clock
     screen: Surface = pygame.display.set_mode((settings.screen_width,
                                                settings.screen_height))
     clock: Clock = pygame.time.Clock()
     scene: SceneManager = SceneManager(settings)
+
+    # create an instance of the ui and audio handlers
     ui_handler: UIHandler = UIHandler(settings, screen, scene)
     audio_handler: AudioHandler = AudioHandler()
     
