@@ -62,11 +62,12 @@ def check_keydown_events(event: Event, screen: Surface, player: Player,
         player.moving_down = True
         player.current_down_key = event.key
     elif event.key == pygame.K_p and not scene.game_screen_active:
+        audio.action_sound.play()
         reset_game(screen, scene, ui_handler, player, cpu)
         pygame.time.set_timer(ui_handler.BLINKEVENT, 0)
     elif event.key == pygame.K_ESCAPE:
         if scene.game_screen_active:
-            audio.pause_sound.play()
+            audio.action_sound.play()
             scene.game_paused = not scene.game_paused
         
 

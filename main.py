@@ -46,7 +46,7 @@ def run_game() -> None:
 
     # start the game loop
     while True:
-        clock.tick(480)
+        clock.tick(640)
         
         gf.check_events(screen, player, cpu, scene, ui_handler,
                         audio_handler)
