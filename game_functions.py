@@ -30,6 +30,11 @@ def check_events(screen: Surface, player: Player, cpu: CPU,
                                  ui_handler)
         elif event.type == pygame.KEYUP:
             check_keyup_events(event, player)
+        elif event.type == ui_handler.BLINKEVENT:
+            if scene.end_screen_active:
+                ui_handler.play_current = next(ui_handler.play_blinker)
+            elif scene.start_screen_active:
+                ui_handler.starter_current = next(ui_handler.starter_blinker)
 
 
 def check_keydown_events(event: Event, screen: Surface, player: Player,
@@ -55,6 +60,7 @@ def check_keydown_events(event: Event, screen: Surface, player: Player,
         player.current_down_key = event.key
     elif event.key == pygame.K_p and not scene.game_screen_active:
         reset_game(screen, scene, ui_handler, player, cpu)
+        pygame.time.set_timer(ui_handler.BLINKEVENT, 0)
     elif event.key == pygame.K_ESCAPE:
         if scene.game_screen_active:
             scene.game_paused = not scene.game_paused
@@ -114,9 +120,10 @@ def check_game_state(settings: GameSettings, ui_handler: UIHandler,
 
     win: int = settings.win_score
 
-    if player_score >= win or cpu_score >= win:
+    if (player_score >= win or cpu_score >= win) and scene.game_screen_active:
         scene.game_screen_active = False
         scene.end_screen_active = True
+        pygame.time.set_timer(ui_handler.BLINKEVENT, 500)
 
 
 def update_screen(settings: GameSettings, screen: Surface,

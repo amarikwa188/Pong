@@ -2,6 +2,7 @@ from settings import GameSettings
 
 
 class SceneManager:
+    """Represents an instance of the scene manager"""
     def __init__(self, settings: GameSettings) -> None:
         self.settings = settings
 

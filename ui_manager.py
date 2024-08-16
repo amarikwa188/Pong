@@ -33,8 +33,16 @@ class UIHandler:
         self.final_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 200)
         self.result_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 70)
         self.play_again_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 30)
+
+        self.BLINKEVENT: int = pygame.USEREVENT + 1
+
         self.play_blinker: cycle = self.play_again_blinker()
+        self.play_current: Surface = next(self.play_blinker)
+
         self.starter_blinker: cycle = self.start_blinker() 
+        self.starter_current: Surface = next(self.starter_blinker)
+        pygame.time.set_timer(self.BLINKEVENT, 500)
+
         self.pause_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 200)
         self.title_font: Font = pygame.font.Font("fonts/ARCADE.TTF", 200)
 
@@ -56,12 +64,12 @@ class UIHandler:
         # end screen ui
         if self.scene_manager.end_screen_active:
             self.display_winner()
-            self.screen.blit(next(self.play_blinker), self.play_again_rect)
+            self.screen.blit(self.play_current, self.play_again_rect)
 
         # start screen ui
         if self.scene_manager.start_screen_active:
             self.draw_title()
-            self.screen.blit(next(self.starter_blinker), self.start_rect)
+            self.screen.blit(self.starter_current, self.start_rect)
             
     
     def draw_game_screen(self) -> None:
@@ -182,7 +190,7 @@ class UIHandler:
         # save the position of the text
         self.play_again_rect: Rect = image_rect
         
-        return cycle([image]*200 + [off_image]*200)
+        return cycle([image, off_image])
     
 
     def draw_pause_screen(self) -> None:
@@ -240,4 +248,4 @@ class UIHandler:
         # save the position of the text
         self.start_rect: Rect = image_rect
 
-        return cycle([image]*200 + [off_image]*200)
+        return cycle([image, off_image])

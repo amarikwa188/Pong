@@ -45,7 +45,7 @@ class Ball(Sprite):
 
         # handle bounce
         self.speed: float = self.settings.ball_speed
-        self.v_x: float = -self.speed
+        self.v_x: float = self.speed
         self.v_y: float = 0.0
 
         # create a mask to handle pixel-perfect collisions
